@@ -25,4 +25,4 @@ spec:
             - name: DATABASE_PASSWORD
               value: yourpassword
             - name: DATABASE_NAME
-              value: yourdbname
+              value: BlogApp
