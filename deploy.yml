@@ -1,0 +1,13 @@
+---
+- name: Deploy Blog Application
+  hosts: local
+  become: true
+  tasks:
+
+    - name: Pull and Run Docker Compose
+      docker_compose:
+        project_src: "{{ playbook_dir }}"
+        state: present
+        pull: yes
+        restarted: yes
+      become: true
