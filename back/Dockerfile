@@ -9,4 +9,4 @@ RUN chmod +x wait-for-it.sh
 
 EXPOSE 9090
 
-CMD ["./wait-for-it.sh", "mysql-container:3306", "--timeout=180", "--", "java", "-jar", "blogs-0.0.1-SNAPSHOT.jar"]
+CMD ["./wait-for-it.sh", "mysql-container:3306", "--timeout=300", "--", "java", "-jar", "blogs-0.0.1-SNAPSHOT.jar"]
