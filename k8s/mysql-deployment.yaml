@@ -19,9 +19,14 @@ spec:
             - containerPort: 3306
           env:
             - name: MYSQL_ROOT_PASSWORD
-              value: yourpassword
+              value: Password@12345
             - name: MYSQL_DATABASE
               value: BlogApp
+          readinessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 30
+            periodSeconds: 10
           volumeMounts:
             - name: mysql-initdb
               mountPath: /docker-entrypoint-initdb.d
