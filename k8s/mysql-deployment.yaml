@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: mysql
-          image: mysql:5.7
+          image: mysql:8.0
           ports:
             - containerPort: 3306
           env:
@@ -23,8 +23,8 @@ spec:
             - name: MYSQL_DATABASE
               value: BlogApp
           readinessProbe:
-            tcpSocket:
-              port: 3306
+            exec:
+              command: ["mysql", "-u", "root", "-pPassword@12345", "-e", "SELECT 1"]
             initialDelaySeconds: 30
             periodSeconds: 10
           volumeMounts:
