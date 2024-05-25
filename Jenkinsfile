@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        maven 'Maven3'
+        ansible 'Ansible'
+    }
+
     environment {
         FRONTEND_IMAGE = 'nikhilguptaiiitb/frontend-app'
         BACKEND_IMAGE = 'nikhilguptaiiitb/backend-app'
