@@ -22,11 +22,6 @@ spec:
               value: Password@12345
             - name: MYSQL_DATABASE
               value: BlogApp
-          readinessProbe:
-            exec:
-              command: ["mysql", "-u", "root", "-pPassword@12345", "-e", "SELECT 1"]
-            initialDelaySeconds: 30
-            periodSeconds: 10
           volumeMounts:
             - name: mysql-initdb
               mountPath: /docker-entrypoint-initdb.d
