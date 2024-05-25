@@ -1,7 +1,7 @@
 ---
 - name: Deploy Blog Application
   hosts: local
-  become: true
+  become: false
   tasks:
 
     - name: Pull and Run Docker Compose
@@ -10,4 +10,4 @@
         state: present
         pull: yes
         restarted: yes
-      become: true
+      become: false
