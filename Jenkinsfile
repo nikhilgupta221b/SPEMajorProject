@@ -6,11 +6,6 @@ pipeline {
         BACKEND_IMAGE = 'nikhilguptaiiitb/backend-app'
     }
 
-    tools {
-        ansible 'Ansible' // Ansible tool configured in Jenkins
-        maven 'Maven3'    // Maven3 tool configured in Jenkins
-    }
-
     stages {
         stage('Clone Repository') {
             steps {
@@ -24,7 +19,6 @@ pipeline {
                 ])
             }
         }
-
         stage('Docker Cleanup') {
             steps {
                 script {
@@ -40,7 +34,7 @@ pipeline {
         stage('Build Frontend Docker Image') {
             steps {
                 script {
-                    docker.build("${FRONTEND_IMAGE}", "./front")
+                    docker.build("$FRONTEND_IMAGE", "./front")
                 }
             }
         }
@@ -48,7 +42,7 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 script {
-                    docker.build("${BACKEND_IMAGE}", "./back")
+                    docker.build("$BACKEND_IMAGE", "./back")
                 }
             }
         }
@@ -57,8 +51,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'DockerhubCred') {
-                        docker.image("${FRONTEND_IMAGE}").push('latest')
-                        docker.image("${BACKEND_IMAGE}").push('latest')
+                        docker.image("$FRONTEND_IMAGE").push('latest')
+                        docker.image("$BACKEND_IMAGE").push('latest')
                     }
                 }
             }
@@ -66,14 +60,14 @@ pipeline {
 
         stage('Deploy with Ansible') {
             steps {
-                withCredentials([string(credentialsId: 'SUDO_PASS', variable: 'SUDO_PASS')]) {
+                withCredentials([string(credentialsId: 'ansible_become_pass', variable: 'SUDO_PASS')]) {
                     ansiblePlaybook(
                         playbook: 'deploy.yml',
                         inventory: 'hosts.ini',
                         become: true,
                         becomeUser: 'root',
                         extraVars: [
-                            ansible_become_pass: "${SUDO_PASS}"
+                            ansible_become_pass: SUDO_PASS
                         ]
                     )
                 }
