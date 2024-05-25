@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: nikhilguptaiiitb/backend-app:latest
+          ports:
+            - containerPort: 9090
+          env:
+            - name: DATABASE_HOST
+              value: mysql-service
+            - name: DATABASE_USER
+              value: root
+            - name: DATABASE_PASSWORD
+              value: yourpassword
+            - name: DATABASE_NAME
+              value: yourdbname

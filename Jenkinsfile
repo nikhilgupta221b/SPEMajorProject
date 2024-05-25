@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         maven 'Maven3'
-        ansible 'Ansible'
     }
 
     environment {
@@ -16,7 +15,7 @@ pipeline {
             steps {
                 checkout([
                     $class: 'GitSCM',
-                    branches: [[name: '*/main']],
+                    branches: [[name: '*/master']],
                     doGenerateSubmoduleConfigurations: false,
                     extensions: [],
                     submoduleCfg: [],
@@ -63,18 +62,11 @@ pipeline {
             }
         }
 
-        stage('Deploy with Ansible') {
+        stage('Deploy to Kubernetes') {
             steps {
-                withCredentials([string(credentialsId: 'ansible_become_pass', variable: 'SUDO_PASS')]) {
-                    ansiblePlaybook(
-                        playbook: 'deploy.yml',
-                        inventory: 'hosts.ini',
-                        become: true,
-                        becomeUser: 'root',
-                        extraVars: [
-                            ansible_become_pass: SUDO_PASS
-                        ]
-                    )
+                script {
+                    // Assumes kubectl is configured on Jenkins agent
+                    sh 'kubectl apply -f k8s/'
                 }
             }
         }
