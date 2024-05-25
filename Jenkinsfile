@@ -40,7 +40,7 @@ pipeline {
         stage('Build Frontend Docker Image') {
             steps {
                 script {
-                    docker.build("$FRONTEND_IMAGE", "./front")
+                    docker.build("${FRONTEND_IMAGE}", "./front")
                 }
             }
         }
@@ -48,7 +48,7 @@ pipeline {
         stage('Build Backend Docker Image') {
             steps {
                 script {
-                    docker.build("$BACKEND_IMAGE", "./back")
+                    docker.build("${BACKEND_IMAGE}", "./back")
                 }
             }
         }
@@ -57,8 +57,8 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', 'DockerhubCred') {
-                        docker.image("$FRONTEND_IMAGE").push('latest')
-                        docker.image("$BACKEND_IMAGE").push('latest')
+                        docker.image("${FRONTEND_IMAGE}").push('latest')
+                        docker.image("${BACKEND_IMAGE}").push('latest')
                     }
                 }
             }
@@ -66,14 +66,14 @@ pipeline {
 
         stage('Deploy with Ansible') {
             steps {
-                withCredentials([string(credentialsId: 'ansible_become_pass', variable: 'SUDO_PASS')]) {
+                withCredentials([string(credentialsId: 'SUDO_PASS', variable: 'SUDO_PASS')]) {
                     ansiblePlaybook(
                         playbook: 'deploy.yml',
                         inventory: 'hosts.ini',
                         become: true,
                         becomeUser: 'root',
                         extraVars: [
-                            ansible_become_pass: SUDO_PASS
+                            ansible_become_pass: "${SUDO_PASS}"
                         ]
                     )
                 }

@@ -5,7 +5,7 @@
   tasks:
 
     - name: Pull and Run Docker Compose
-      docker_compose:
+      community.docker.docker_compose:
         project_src: "{{ playbook_dir }}"
         state: present
         pull: yes
